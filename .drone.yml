@@ -1,0 +1,24 @@
+pipeline:
+  py36:
+    image: plugins/docker
+    secrets: [docker_username, docker_password]
+    repo: tataucloud/python-horovod
+    registry: docker.io
+    dockerfile: Dockerfile
+    tags:
+      - '3.6'
+    build_args:
+      - PYTHON_VERSION=3.6.7
+      - PYTHON_PIP_VERSION=18.1
+
+  py37:
+    image: plugins/docker
+    secrets: [docker_username, docker_password]
+    repo: tataucloud/python-horovod
+    registry: docker.io
+    dockerfile: Dockerfile
+    tags:
+      - '3.7'
+    build_args:
+      - PYTHON_VERSION=3.7.2
+      - PYTHON_PIP_VERSION=18.1
