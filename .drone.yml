@@ -1,5 +1,7 @@
 pipeline:
   py36:
+    when:
+      branch: [master]
     image: plugins/docker
     secrets: [docker_username, docker_password]
     repo: tataucloud/python-horovod
@@ -12,6 +14,8 @@ pipeline:
       - PYTHON_PIP_VERSION=18.1
 
   py37:
+    when:
+      branch: [master]
     image: plugins/docker
     secrets: [docker_username, docker_password]
     repo: tataucloud/python-horovod
