@@ -8,14 +8,14 @@ LABEL maintainer="tatau.io"
 ENV TENSORFLOW_VERSION=1.12.0
 ENV PYTORCH_VERSION=1.0.0
 ENV CUDNN_VERSION=7.4.1.5-1+cuda9.0
-ENV NCCL_VERSION=2.3.5-2+cuda9.0
+ENV NCCL_VERSION=2.3.7-1+cuda9.0
 ENV KERAS_VERSION=2.2.2
 ENV H5PY_VERSION=2.8.0
 ENV TORCHVISION_VERSION=0.2.1
 ENV HOROVOD_VERSION=0.15.2
 
 
-RUN apt-get update && apt-get install -y --no-install-recommends \
+RUN apt-get update && apt-get install -y --no-install-recommends --allow-downgrades \
         build-essential \
         cmake \
         git \
@@ -28,7 +28,6 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
         libnccl-dev=${NCCL_VERSION} \
         libjpeg-dev \
         libpng-dev \
-        apt-utils \
         libncurses5-dev \
         libncursesw5-dev \
         tk-dev \
