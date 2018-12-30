@@ -1,10 +1,28 @@
 pipeline:
-  py36:
+  py35:
     when:
-      branch: [master]
+      event: [ pull_request ]
+      branch: [ master ]
+
     image: plugins/docker
     secrets: [docker_username, docker_password]
-    repo: tataucloud/python-horovod
+    repo: tataucloud/python-horovod-mpich
+    registry: docker.io
+    dockerfile: Dockerfile
+    tags:
+      - '3.5'
+    build_args:
+      - PYTHON_VERSION=3.5
+
+
+  py36:
+    when:
+      event: [ pull_request ]
+      branch: [ master ]
+
+    image: plugins/docker
+    secrets: [docker_username, docker_password]
+    repo: tataucloud/python-horovod-mpich
     registry: docker.io
     dockerfile: Dockerfile
     tags:
@@ -12,15 +30,39 @@ pipeline:
     build_args:
       - PYTHON_VERSION=3.6
 
-  py37:
+#  py37:
+#    when:
+#      branch: [master]
+#    image: plugins/docker
+#    secrets: [docker_username, docker_password]
+#    repo: tataucloud/python-horovod-mpich
+#    registry: docker.io
+#    dockerfile: Dockerfile
+#    tags:
+#      - '3.7'
+#    build_args:
+#      - PYTHON_VERSION=3.7
+
+  notify:
+    image: plugins/slack
+    secrets: [slack_webhook]
+    webhook: $$SLACK_WEBHOOK1
+    channel: "build-status"
+    username: drone
+    template: >
+      {{#success build.status}}
+        author: {{build.author}}
+        repo: {{repo.name}}/{{build.branch}}
+        link: {{build.link}}
+        build {{build.number}} `{{build.status}}`. Good job {{build.author}}!
+      {{else}}
+        author: {{build.author}}
+        repo: {{repo.name}}/{{build.branch}}
+        link: {{build.link}}
+        build {{build.number}} `{{build.status}}`. Fix me please. <@build-status>
+      {{/success}}
+
     when:
-      branch: [master]
-    image: plugins/docker
-    secrets: [docker_username, docker_password]
-    repo: tataucloud/python-horovod
-    registry: docker.io
-    dockerfile: Dockerfile
-    tags:
-      - '3.7'
-    build_args:
-      - PYTHON_VERSION=3.7
+      event: [ pull_request ]
+      branch: [ master ]
+      status: [ success, failure ]
