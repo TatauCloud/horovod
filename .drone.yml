@@ -46,7 +46,7 @@ pipeline:
   notify:
     image: plugins/slack
     secrets: [slack_webhook]
-    webhook: $$SLACK_WEBHOOK1
+    webhook: $SLACK_WEBHOOK
     channel: "build-status"
     username: drone
     template: >
