@@ -81,8 +81,9 @@ RUN mv /usr/bin/mpirun /usr/bin/mpirun.real && \
 # Configure OpenMPI to run good defaults:
 #   --bind-to none --map-by slot --mca btl_tcp_if_exclude lo,docker0
 RUN echo "hwloc_base_binding_policy = none" >> /usr/local/etc/openmpi-mca-params.conf && \
-    echo "rmaps_base_mapping_policy = slot" >> /usr/local/etc/openmpi-mca-params.conf && \
-    echo "btl_tcp_if_exclude = lo,docker0" >> /usr/local/etc/openmpi-mca-params.conf
+    echo "rmaps_base_mapping_policy = slot" >> /usr/local/etc/openmpi-mca-params.conf
+    # Conflicted with option btl_tcp_if_include
+    # echo "btl_tcp_if_exclude = lo,docker0" >> /usr/local/etc/openmpi-mca-params.conf
 
 # Set default NCCL parameters
 RUN echo NCCL_DEBUG=INFO >> /etc/nccl.conf
