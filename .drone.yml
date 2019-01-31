@@ -1,18 +1,18 @@
 pipeline:
-  py35:
-    when:
-      event: [ pull_request ]
-      branch: [ master ]
-
-    image: plugins/docker
-    secrets: [docker_username, docker_password]
-    repo: tataucloud/python-horovod-mpich
-    registry: docker.io
-    dockerfile: Dockerfile
-    tags:
-      - '3.5'
-    build_args:
-      - PYTHON_VERSION=3.5
+#  py35:
+#    when:
+#      event: [ pull_request ]
+#      branch: [ master ]
+#
+#    image: plugins/docker
+#    secrets: [docker_username, docker_password]
+#    repo: tataucloud/python-horovod-mpich
+#    registry: docker.io
+#    dockerfile: Dockerfile
+#    tags:
+#      - '3.5'
+#    build_args:
+#      - PYTHON_VERSION=3.5
 
 
   py36:
