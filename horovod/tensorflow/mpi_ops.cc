@@ -225,7 +225,7 @@ common::Status
 TFOpContext::AllocateOutput(common::TensorShape shape,
                             std::shared_ptr<common::Tensor>* tensor) {
   TensorShape tf_shape;
-  for (int idx = 0; idx < shape.dims(); idx++) {
+  for (int idx = 0; idx < shape.dims(); ++idx) {
     tf_shape.AddDim(shape.dim_size(idx));
   }
   Tensor* tf_tensor;
@@ -361,7 +361,7 @@ public:
 
 REGISTER_KERNEL_BUILDER(Name("HorovodAllgather").Device(DEVICE_CPU),
                         HorovodAllgatherOp);
-#if HAVE_CUDA
+#if HOROVOD_GPU_ALLGATHER
 REGISTER_KERNEL_BUILDER(Name("HorovodAllgather").Device(DEVICE_GPU),
                         HorovodAllgatherOp);
 #endif
