@@ -15,7 +15,7 @@ ENV TORCHVISION_VERSION=0.2.1
 ENV HOROVOD_VERSION=0.15.2
 
 
-RUN apt-get update && apt-get install -y --no-install-recommends \
+RUN apt-get update && apt-get install -y --allow-downgrades --allow-change-held-packages --no-install-recommends \
         build-essential \
         cmake \
         git \
