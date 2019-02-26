@@ -223,6 +223,9 @@ int DoBroadcastCudaOnCPU(TC* tensor, TC* output, int root_rank, char* name) {
                                                 name);                         \
   }
 
+ALLREDUCE(torch_ByteTensor, MPIDataType::HOROVOD_UINT8, DeviceType::CPU,
+          THByteTensor)
+    
 ALLREDUCE(torch_IntTensor, MPIDataType::HOROVOD_INT32, DeviceType::CPU,
           THIntTensor)
 ALLREDUCE(torch_LongTensor, MPIDataType::HOROVOD_INT64, DeviceType::CPU,
@@ -233,6 +236,8 @@ ALLREDUCE(torch_DoubleTensor, MPIDataType::HOROVOD_FLOAT64, DeviceType::CPU,
           THDoubleTensor)
 
 #if HOROVOD_GPU_ALLREDUCE
+ALLREDUCE(torch_cuda_ByteTensor, MPIDataType::HOROVOD_UINT8, DeviceType::GPU,
+          THByteTensor)  
 ALLREDUCE(torch_cuda_IntTensor, MPIDataType::HOROVOD_INT32, DeviceType::GPU,
           THCudaIntTensor)
 ALLREDUCE(torch_cuda_LongTensor, MPIDataType::HOROVOD_INT64, DeviceType::GPU,
@@ -251,6 +256,8 @@ ALLREDUCE(torch_cuda_DoubleTensor, MPIDataType::HOROVOD_FLOAT64,
   }
 
 #if !HOROVOD_GPU_ALLREDUCE && HAVE_CUDA
+ALLREDUCE_CUDA_ON_CPU(torch_cuda_ByteTensor, MPIDataType::HOROVOD_UINT8,
+                      THCudaByteTensor, THByteTensor)
 ALLREDUCE_CUDA_ON_CPU(torch_cuda_IntTensor, MPIDataType::HOROVOD_INT32,
                       THCudaIntTensor, THIntTensor)
 ALLREDUCE_CUDA_ON_CPU(torch_cuda_LongTensor, MPIDataType::HOROVOD_INT64,
