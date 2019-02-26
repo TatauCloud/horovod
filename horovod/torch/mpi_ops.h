@@ -31,12 +31,14 @@ using namespace horovod::common;
   extern "C" int horovod_torch_allreduce_async_##torch_Tensor(                 \
       THTensor* tensor, THTensor* output, int average, char* name);
 
+ALLREDUCE_H(torch_ByteTensor, THByteTensor)
 ALLREDUCE_H(torch_IntTensor, THIntTensor)
 ALLREDUCE_H(torch_LongTensor, THLongTensor)
 ALLREDUCE_H(torch_FloatTensor, THFloatTensor)
 ALLREDUCE_H(torch_DoubleTensor, THDoubleTensor)
 
 #if HAVE_CUDA
+ALLREDUCE_H(torch_cuda_ByteTensor, THCudaByteTensor)
 ALLREDUCE_H(torch_cuda_IntTensor, THCudaIntTensor)
 ALLREDUCE_H(torch_cuda_LongTensor, THCudaLongTensor)
 ALLREDUCE_H(torch_cuda_FloatTensor, THCudaTensor)
