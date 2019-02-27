@@ -235,18 +235,22 @@ void WaitAndClear(int handle) {
 
 PYBIND11_MODULE(mpi_lib_v2, m) {
   // allreduce
+  m.def("horovod_torch_allreduce_async_torch_ByteTensor", &DoAllreduce);
   m.def("horovod_torch_allreduce_async_torch_IntTensor", &DoAllreduce);
   m.def("horovod_torch_allreduce_async_torch_LongTensor", &DoAllreduce);
   m.def("horovod_torch_allreduce_async_torch_HalfTensor", &DoAllreduce);
   m.def("horovod_torch_allreduce_async_torch_FloatTensor", &DoAllreduce);
   m.def("horovod_torch_allreduce_async_torch_DoubleTensor", &DoAllreduce);
 #if HOROVOD_GPU_ALLREDUCE
+  m.def("horovod_torch_allreduce_async_torch_cuda_ByteTensor", &DoAllreduce);
   m.def("horovod_torch_allreduce_async_torch_cuda_IntTensor", &DoAllreduce);
   m.def("horovod_torch_allreduce_async_torch_cuda_LongTensor", &DoAllreduce);
   m.def("horovod_torch_allreduce_async_torch_cuda_HalfTensor", &DoAllreduce);
   m.def("horovod_torch_allreduce_async_torch_cuda_FloatTensor", &DoAllreduce);
   m.def("horovod_torch_allreduce_async_torch_cuda_DoubleTensor", &DoAllreduce);
 #else
+  m.def("horovod_torch_allreduce_async_torch_cuda_ByteTensor",
+        &DoAllreduceCudaOnCPU);
   m.def("horovod_torch_allreduce_async_torch_cuda_IntTensor",
         &DoAllreduceCudaOnCPU);
   m.def("horovod_torch_allreduce_async_torch_cuda_LongTensor",
