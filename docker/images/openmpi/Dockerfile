@@ -67,7 +67,7 @@ RUN mkdir /tmp/nvidia-peer-memory && \
     ls -alh && \
     ./build_module.sh && \
     dpkg-buildpackage -us -uc && \
-    dpkg -i ../nvidia-peer-memory_1.0-7_all.deb ../nvidia-peer-memory-dkms_1.0-7_all.deb && \
+    dpkg -i ../nvidia-peer-memory_1.0-7_all.deb && \
     cd / && \
     rm -rf /tmp/nvidia-peer-memory
 
