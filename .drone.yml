@@ -1,34 +1,53 @@
 pipeline:
-  py35:
-    when:
-      event: [ pull_request ]
-      branch: [ master ]
+# Temporarily disabled for rebuild
+#  py35:
+#    when:
+#      event: [ pull_request ]
+#      branch: [ master ]
+#
+#    image: plugins/docker
+#    secrets: [docker_username, docker_password]
+#    repo: tataucloud/python-horovod-mpich
+#    registry: docker.io
+#    dockerfile: Dockerfile
+#    tags:
+#      - '3.5'
+#    build_args:
+#      - PYTHON_VERSION=3.5
+#      - HOROVOD_GPU_ALLREDUCE=NCCL
+#
+#  py36:
+#    when:
+#      event: [ pull_request ]
+#      branch: [ master ]
+#
+#    image: plugins/docker
+#    secrets: [docker_username, docker_password]
+#    repo: tataucloud/python-horovod-mpich
+#    registry: docker.io
+#    dockerfile: Dockerfile
+#    tags:
+#      - '3.6'
+#    build_args:
+#      - PYTHON_VERSION=3.6
+#      - HOROVOD_GPU_ALLREDUCE=NCCL
 
-    image: plugins/docker
-    secrets: [docker_username, docker_password]
-    repo: tataucloud/python-horovod-mpich
-    registry: docker.io
-    dockerfile: Dockerfile
-    tags:
-      - '3.5'
-    build_args:
-      - PYTHON_VERSION=3.5
 
+#  py36-openmpi-mpi:
+#    when:
+#      event: [ pull_request ]
+#      branch: [ master ]
+#
+#    image: plugins/docker
+#    secrets: [docker_username, docker_password]
+#    repo: tataucloud/horovod-openmpi
+#    registry: docker.io
+#    dockerfile: docker/images/openmpi/Dockerfile
+#    tags:
+#      - '3.6'
+#    build_args:
+#      - PYTHON_VERSION=3.6
 
-  py36:
-    when:
-      event: [ pull_request ]
-      branch: [ master ]
-
-    image: plugins/docker
-    secrets: [docker_username, docker_password]
-    repo: tataucloud/python-horovod-mpich
-    registry: docker.io
-    dockerfile: Dockerfile
-    tags:
-      - '3.6'
-    build_args:
-      - PYTHON_VERSION=3.6
 
 # Not supported by TF yet
 #  py37:
@@ -43,6 +62,7 @@ pipeline:
 #      - '3.7'
 #    build_args:
 #      - PYTHON_VERSION=3.7
+#      - HOROVOD_GPU_ALLREDUCE=NCCL
 
   notify:
     image: plugins/slack
