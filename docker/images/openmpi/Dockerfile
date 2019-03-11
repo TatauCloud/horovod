@@ -56,14 +56,12 @@ RUN mkdir /tmp/nvidia-peer-memory && \
     cd /tmp/nvidia-peer-memory && \
     wget http://content.mellanox.com/ofed/nvidia-peer-memory_1.0-7.tar.gz && \
     mv nvidia-peer-memory_1.0-7.tar.gz nvidia-peer-memory_1.0.orig.tar.gz && \
-    tar -xf nvidia-peer-memory_1.0.orig.tar.gz
-
-RUN cd /tmp/nvidia-peer-memory/nvidia-peer-memory-1.0 && \
+    tar -xf nvidia-peer-memory_1.0.orig.tar.gz && cd /tmp/nvidia-peer-memory/nvidia-peer-memory-1.0 && \
     pwd && \
     ls -alh && \
     ./build_module.sh && \
     dpkg-buildpackage -us -uc && \
-    # dpkg -i ../nvidia-peer-memory_1.0-7_all.deb ../nvidia-peer-memory-dkms_1.0-7_all.deb && \
+    dpkg -i ../nvidia-peer-memory_1.0-7_all.deb ../nvidia-peer-memory-dkms_1.0-7_all.deb && \
     cd / && \
     rm -rf /tmp/nvidia-peer-memory
 
