@@ -37,11 +37,10 @@ RUN apt-get update && apt-get install -y --allow-downgrades --allow-change-held-
         libfreetype6-dev \
         libffi-dev \
         openssh-client openssh-server \
-        mpich libmpich-dev \
         && rm -rf /var/lib/apt/lists/* && mkdir -p /var/run/sshd
 
 # Install TensorFlow, Keras and PyTorch
-RUN pip install  --no-cache-dir \
+RUN pip install --no-cache-dir \
     tensorflow-gpu==${TENSORFLOW_VERSION} \
     keras==${KERAS_VERSION} \
     h5py==${H5PY_VERSION} \
@@ -49,28 +48,28 @@ RUN pip install  --no-cache-dir \
     torchvision==${TORCHVISION_VERSION}
 
 # Install Open MPI
-#RUN mkdir /tmp/openmpi && \
-#    cd /tmp/openmpi && \
-#    wget https://www.open-mpi.org/software/ompi/v3.1/downloads/openmpi-3.1.2.tar.gz && \
-#    tar zxf openmpi-3.1.2.tar.gz && \
-#    cd openmpi-3.1.2 && \
-#    ./configure --enable-orterun-prefix-by-default && \
-#    make -j $(nproc) all && \
-#    make install && \
-#    ldconfig && \
-#    rm -rf /tmp/openmpi
+RUN mkdir /tmp/openmpi && \
+    cd /tmp/openmpi && \
+    wget https://www.open-mpi.org/software/ompi/v3.1/downloads/openmpi-3.1.2.tar.gz && \
+    tar zxf openmpi-3.1.2.tar.gz && \
+    cd openmpi-3.1.2 && \
+    ./configure --enable-orterun-prefix-by-default && \
+    make -j $(nproc) all && \
+    make install && \
+    ldconfig && \
+    rm -rf /tmp/openmpi
 
 # Install Horovod, temporarily using CUDA stubs
 RUN ldconfig /usr/local/cuda-9.0/targets/x86_64-linux/lib/stubs && \
-    HOROVOD_GPU_ALLREDUCE=NCCL HOROVOD_WITH_TENSORFLOW=1 HOROVOD_WITH_PYTORCH=1 pip install --no-cache-dir horovod && \
+    HOROVOD_GPU_ALLREDUCE=NCCL HOROVOD_WITH_TENSORFLOW=1 \
+    HOROVOD_WITH_PYTORCH=1 pip install --no-cache-dir horovod && \
     ldconfig
 
 # Create a wrapper for OpenMPI to allow running as root by default
-
-#RUN mv /usr/local/bin/mpirun /usr/local/bin/mpirun.real && \
-#    echo '#!/bin/bash' > /usr/local/bin/mpirun && \
-#    echo 'mpirun.real --allow-run-as-root "$@"' >> /usr/local/bin/mpirun && \
-#    chmod a+x /usr/local/bin/mpirun
+RUN mv /usr/local/bin/mpirun /usr/local/bin/mpirun.real && \
+    echo '#!/bin/bash' > /usr/local/bin/mpirun && \
+    echo 'mpirun.real --allow-run-as-root "$@"' >> /usr/local/bin/mpirun && \
+    chmod a+x /usr/local/bin/mpirun
 
 # Replace /usr/local/bin by /usr/bin because mpich used from apt
 RUN mv /usr/bin/mpirun /usr/bin/mpirun.real && \

@@ -16,12 +16,7 @@ ENV NCCL_VERSION=2.4.2-1+cuda9.0
 ENV MXNET_URL=https://s3-us-west-2.amazonaws.com/mxnet-python-packages-gcc5/mxnet_cu90_gcc5-1.4.0-py2.py3-none-manylinux1_x86_64.whl
 ENV DEBIAN_FRONTEND=noninteractive
 ENV OFED_VER=4.5-1.0.1.0
-
-#ENV http_proxy=http://172.17.0.1:3128 \
-#    https_proxy=http://172.17.0.1:3128 \
-#    ftp_proxy=http://172.17.0.1:3128
-# RUN apt update && apt install -y
-
+ENV NVIDIA_DRIVER_VERSION=410
 
 RUN apt-get update && apt-get install -y --allow-downgrades --allow-change-held-packages --no-install-recommends \
         build-essential \
@@ -49,8 +44,19 @@ RUN apt-get update && apt-get install -y --allow-downgrades --allow-change-held-
         unzip nano git \
         autotools-dev dkms debhelper \
         libelf-dev libnuma-dev \
+        binutils libiberty-dev \
+        linux-headers-$(uname -r) nvidia-${NVIDIA_DRIVER_VERSION}-dev \
         && rm -rf /var/lib/apt/lists/* && mkdir -p /var/run/sshd
 
+
+RUN mkdir /tmp/gdr-copy && cd /tmp/gdr-copy && \
+    wget https://github.com/NVIDIA/gdrcopy/archive/v1.3.tar.gz && \
+    mv v1.3.tar.gz gdrcopy-v1.3.tar.gz && \
+    tar -xf gdrcopy-v1.3.tar.gz && \
+    cd gdrcopy-1.3 && \
+    make PREFIX=/usr/local CUDA=/usr/local/cuda all && \
+    make install && \
+    cd /tmp && rm -rf /tmp/gdr-copy
 
 RUN mkdir /tmp/nvidia-peer-memory && \
     cd /tmp/nvidia-peer-memory && \
@@ -66,6 +72,8 @@ RUN mkdir /tmp/nvidia-peer-memory && \
     rm -rf /tmp/nvidia-peer-memory
 
 
+
+
 RUN wget http://content.mellanox.com/ofed/MLNX_OFED-${OFED_VER}/MLNX_OFED_LINUX-${OFED_VER}-ubuntu16.04-x86_64.tgz && \
     tar -xzvf MLNX_OFED_LINUX-${OFED_VER}-ubuntu16.04-x86_64.tgz && \
     rm -rf MLNX_OFED_LINUX-${OFED_VER}-ubuntu16.04-x86_64.tgz && \
@@ -78,7 +86,8 @@ RUN mkdir /tmp/ucx && \
     wget "https://github.com/openucx/ucx/releases/download/v1.5.0/ucx-1.5.0.tar.gz" && \
     tar xzf ucx-1.5.0.tar.gz && \
     cd ucx-1.5.0 && \
-    ./contrib/configure-release --prefix=$PWD/install --with-verbs --with-mlx5-dv --with-dm --with-cuda= && \
+    ./contrib/configure-release --with-verbs \
+        --with-mlx5-dv --with-dm --with-cuda=/usr/local/cuda --with-gdrcopy --with-rdmacm  && \
     make -j8 && \
     make install && rm -rf /tmp/ucx
 
